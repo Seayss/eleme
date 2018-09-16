@@ -4,9 +4,9 @@ import { Request } from "../src";
 (async () => {
   // 请先查看 test/bind.ts，接码成功后的 getCookie() 对象，传入此处
   const request = new Request({
-    openid: "getCookie().openid",
-    sign: "getCookie().sign",
-    sid: "getCookie().sid"
+    openid: "openid", // QQ或者WX授权登录饿了么之后，从cookie中可得openid
+    sign: "sign", // QQ或者WX授权登录饿了么之后，从cookie中可得eleme_key就是sign
+    sid: "sid" // 接码后可得
   });
   const url =
     "https://h5.ele.me/hongbao/#hardware_id=&is_lucky_group=True&lucky_number=7&track_id=&platform=0&sn=10fbda7a6c8e8012&theme_id=2881&device_id=&refer_user_id=21150550";

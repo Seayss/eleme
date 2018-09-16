@@ -44,7 +44,7 @@ export class Request {
   }
 
   /**
-   * 底层请求，一般不要直接调用
+   * 底层请求，可以做一些统一的请求前后处理
    * @param {string} method 请求方式
    * @param {string} url 请求地址
    * @param data 请求数据
@@ -52,7 +52,7 @@ export class Request {
    * @returns {Promise<AxiosResponse>}
    * @private
    */
-  private async _request(
+  private async request(
     method: string,
     url: string,
     data?: any,
@@ -85,7 +85,7 @@ export class Request {
     headimgurl: string = "",
     nickname: string = ""
   ): Promise<object> {
-    const { data } = await this._request(
+    const { data } = await this.request(
       "post",
       `/restapi/marketing/promotion/weixin/${this.cookie.openid}`,
       {
@@ -119,7 +119,7 @@ export class Request {
   async getLuckyNumber(sn: string): Promise<number> {
     const {
       data: { lucky_number }
-    } = await this._request(
+    } = await this.request(
       "get",
       `/restapi/marketing/themes/0/group_sns/${sn}`
     );
@@ -131,7 +131,7 @@ export class Request {
    * @returns {Promise<object>}
    */
   async changeMobile(): Promise<object> {
-    const { data } = await this._request(
+    const { data } = await this.request(
       "post",
       `/restapi/marketing/hongbao/weixin/${this.cookie.openid}/change`,
       {
@@ -156,7 +156,7 @@ export class Request {
     const {
       data: { user_id },
       headers
-    } = await this._request("post", "/restapi/eus/login/login_by_mobile", {
+    } = await this.request("post", "/restapi/eus/login/login_by_mobile", {
       mobile: this.mobile,
       validate_code: validateCode,
       validate_token: this.validateToken
@@ -184,7 +184,7 @@ export class Request {
   ): Promise<string> {
     const {
       data: { validate_token }
-    } = await this._request("post", "/restapi/eus/login/mobile_send_code", {
+    } = await this.request("post", "/restapi/eus/login/mobile_send_code", {
       mobile,
       captcha_hash,
       captcha_value
