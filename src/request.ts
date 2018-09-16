@@ -47,7 +47,7 @@ export class Request {
    * 底层请求，可以做一些统一的请求前后处理
    * @param {string} method 请求方式
    * @param {string} url 请求地址
-   * @param data 请求数据
+   * @param {*} data 请求数据
    * @param {AxiosRequestConfig} config 其它配置
    * @returns {Promise<AxiosResponse>}
    * @private
