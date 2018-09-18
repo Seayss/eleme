@@ -19,3 +19,13 @@
 npm i
 npx ts-node example/get.ts
 ```
+
+## 其它 JS 项目中引入
+
+```
+npm i github:mtdhb/eleme
+```
+
+```
+const Eleme = require('eleme')
+```
