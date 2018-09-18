@@ -23,10 +23,12 @@ npm i github:mtdhb/eleme
 const { Request } = require("eleme");
 
 const request = new Request({
-  openid: "openid",
-  sign: "sign",
-  sid: "sid"
+  openid: "",
+  sign: "",
+  sid: ""
 });
+
+// 具体调用方式可参考 example/ 目录
 ```
 
 ## 运行示例
