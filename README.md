@@ -13,14 +13,20 @@
   - [bind.ts](example/bind.ts) - 接码绑定手机号
   - [get.ts](example/get.ts) - 领取红包
 
-## 在其它 JS 项目中引入
+## 在 JS 项目中引入
 
 ```bash
 npm i github:mtdhb/eleme
 ```
 
 ```js
-const Eleme = require("eleme");
+const { Request } = require("eleme");
+
+const request = new Request({
+  openid: "openid",
+  sign: "sign",
+  sid: "sid"
+});
 ```
 
 ## 运行示例
