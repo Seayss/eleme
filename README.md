@@ -27,9 +27,9 @@ const request = new Request({
   sign: "",
   sid: ""
 });
-
-// 具体调用方式可参考 example/ 目录
 ```
+
+具体调用方式可参考 example/ 目录，在 src 中也有详细方法注释
 
 ## 运行示例
 
