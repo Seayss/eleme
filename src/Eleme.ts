@@ -1,25 +1,59 @@
-import axios, {
-  AxiosInstance,
-  AxiosProxyConfig,
-  AxiosRequestConfig,
-  AxiosResponse
-} from "axios";
-import * as querystring from "querystring";
+import { AxiosProxyConfig } from "axios";
+import { Cookie } from "./Cookie";
+import { Request } from "./Request";
 
-export interface Cookie {
-  openid: string;
-  sign: string;
-  sid?: string;
-}
-
-export class Request {
-  private axios: AxiosInstance;
-  private cookie: Cookie;
+export class Eleme {
+  private readonly request: Request;
+  private readonly cookie: Cookie;
   private mobile: string;
   private validateToken: string;
 
-  private static createXShared(sn: string = "29e47b57971c1c9d"): string {
-    return `eosid=${parseInt(sn, 16)}`;
+  /**
+   * 将抓包或从浏览器开发者工具中获得的完整cookie 转为 Cookie 对象
+   * @param {string} cookie
+   * @returns {Cookie}
+   */
+  static parseCookie(cookie: string): Cookie | null {
+    try {
+      cookie = this.cleanCookie(cookie)
+        .split(/;\s*/)
+        .find(item => /^snsInfo\[/.test(item));
+      if (cookie) {
+        let snsInfoStr = decodeURIComponent(cookie.split("=")[1]);
+        if (snsInfoStr[snsInfoStr.length - 1] === '"') {
+          snsInfoStr = snsInfoStr.slice(0, -1);
+        }
+        const snsInfo: { eleme_key: string; openid: string } = JSON.parse(
+          snsInfoStr
+        );
+        if (snsInfo.eleme_key && snsInfo.openid) {
+          return <Cookie>{
+            openid: String(snsInfo.openid).trim(),
+            sign: String(snsInfo.eleme_key).trim(),
+            sid: null
+          };
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  /**
+   * 将抓包或从浏览器开发者工具中获得的完整cookie 清理一下
+   * @param {string} cookie
+   * @returns {string}
+   */
+  static cleanCookie(cookie: string): string {
+    cookie = String(cookie)
+      .replace(/\n/g, "")
+      .trim();
+    if (
+      (cookie[0] === '"' && cookie[cookie.length - 1] === '"') ||
+      (cookie[0] === "'" && cookie[cookie.length - 1] === "'")
+    ) {
+      cookie = cookie.slice(1, -1);
+    }
+    return cookie;
   }
 
   /**
@@ -28,41 +62,8 @@ export class Request {
    * @param {AxiosProxyConfig} proxy 代理配置
    */
   constructor(cookie: Cookie, proxy?: AxiosProxyConfig) {
-    this.cookie = cookie;
-    this.axios = axios.create({
-      proxy,
-      baseURL: "https://h5.ele.me",
-      method: "POST",
-      headers: {
-        referer: "https://h5.ele.me/hongbao/",
-        origin: "https://h5.ele.me",
-        "x-shard": Request.createXShared(),
-        "user-agent":
-          "Mozilla/5.0 (Linux; Android 7.0; MIX Build/NRD90M; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/6.2 TBS/044004 Mobile Safari/537.36 V1_AND_SQ_7.5.0_794_YYB_D QQ/7.5.0.3430 NetType/WIFI WebP/0.3.0 Pixel/1080"
-      }
-    });
-  }
-
-  /**
-   * 底层请求，可以做一些统一的请求前后处理
-   * @param {string} method 请求方式
-   * @param {string} url 请求地址
-   * @param {*} data 请求数据
-   * @param {AxiosRequestConfig} config 其它配置
-   * @returns {Promise<AxiosResponse>}
-   * @private
-   */
-  private async request(
-    method: string,
-    url: string,
-    data?: any,
-    config?: AxiosRequestConfig
-  ): Promise<AxiosResponse> {
-    try {
-      return await this.axios[method](url, querystring.stringify(data), config);
-    } catch (e) {
-      return e.response;
-    }
+    this.cookie = { ...cookie };
+    this.request = new Request(proxy);
   }
 
   /**
@@ -70,7 +71,7 @@ export class Request {
    * @returns {Cookie}
    */
   getCookie(): Cookie {
-    return <Cookie>{ ...this.cookie };
+    return this.cookie;
   }
 
   /**
@@ -85,7 +86,7 @@ export class Request {
     headimgurl: string = "",
     nickname: string = ""
   ): Promise<object> {
-    const { data } = await this.request(
+    const { data } = await this.request.send(
       "post",
       `/restapi/marketing/promotion/weixin/${this.cookie.openid}`,
       {
@@ -119,7 +120,7 @@ export class Request {
   async getLuckyNumber(sn: string): Promise<number> {
     const {
       data: { lucky_number }
-    } = await this.request(
+    } = await this.request.send(
       "get",
       `/restapi/marketing/themes/0/group_sns/${sn}`
     );
@@ -131,7 +132,7 @@ export class Request {
    * @returns {Promise<object>}
    */
   async changeMobile(): Promise<object> {
-    const { data } = await this.request(
+    const { data } = await this.request.send(
       "post",
       `/restapi/marketing/hongbao/weixin/${this.cookie.openid}/change`,
       {
@@ -156,7 +157,7 @@ export class Request {
     const {
       data: { user_id },
       headers
-    } = await this.request("post", "/restapi/eus/login/login_by_mobile", {
+    } = await this.request.send("post", "/restapi/eus/login/login_by_mobile", {
       mobile: this.mobile,
       validate_code: validateCode,
       validate_token: this.validateToken
@@ -184,7 +185,7 @@ export class Request {
   ): Promise<string> {
     const {
       data: { validate_token }
-    } = await this.request("post", "/restapi/eus/login/mobile_send_code", {
+    } = await this.request.send("post", "/restapi/eus/login/mobile_send_code", {
       mobile,
       captcha_hash,
       captcha_value

@@ -1,9 +1,9 @@
 import * as querystring from "querystring";
-import { Request } from "../src";
+import { Eleme } from "../src";
 
 (async () => {
   // 请先查看 test/bind.ts，接码成功后的 getCookie() 对象，传入此处
-  const request = new Request({
+  const eleme = new Eleme({
     openid: "openid", // QQ或者WX授权登录饿了么之后，从cookie中可得openid
     sign: "sign", // QQ或者WX授权登录饿了么之后，从cookie中可得eleme_key就是sign
     sid: "sid" // 接码后可得
@@ -14,10 +14,10 @@ import { Request } from "../src";
   const sn = <string>query.sn;
   if (sn) {
     console.log(sn);
-    const luckyNumber = await request.getLuckyNumber(sn);
+    const luckyNumber = await eleme.getLuckyNumber(sn);
     if (luckyNumber) {
       console.log(`是拼手气链接，第${luckyNumber}个最大`);
-      const res = await request.getHongbao(sn);
+      const res = await eleme.getHongbao(sn);
       console.log("领取结果", res);
       // 可以通过 ret_code 来判断领取情况，请参考 https://github.com/mtdhb/get 对领取结果的处理方式
     } else {
