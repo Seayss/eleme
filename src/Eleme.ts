@@ -62,7 +62,7 @@ export class Eleme {
    * @param {AxiosProxyConfig} proxy 代理配置
    */
   constructor(cookie: Cookie, proxy?: AxiosProxyConfig) {
-    this.cookie = { ...cookie };
+    this.cookie = <Cookie>{ ...cookie };
     this.request = new Request(proxy);
   }
 
