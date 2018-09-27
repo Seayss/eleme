@@ -118,7 +118,7 @@ export class Eleme {
    * @param {string} theme_id 红包页面主题标识
    * @returns {Promise<number>}
    */
-  async getLuckyNumber(sn: string, theme_id: string = "0"): Promise<number> {
+  async getLuckyNumber(sn: string, theme_id: string = "2913"): Promise<number> {
     const {
       data: { lucky_number }
     } = await this.request.send(
