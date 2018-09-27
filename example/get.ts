@@ -9,12 +9,13 @@ import { Eleme } from "../src";
     sid: "sid" // 接码后可得
   });
   const url =
-    "https://h5.ele.me/hongbao/#hardware_id=&is_lucky_group=True&lucky_number=7&track_id=&platform=0&sn=10fbda7a6c8e8012&theme_id=2881&device_id=&refer_user_id=21150550";
+    "https://h5.ele.me/hongbao/#hardware_id=&is_lucky_group=True&lucky_number=8&track_id=&platform=0&sn=10fcda587ea2d807&theme_id=2913&device_id=&refer_user_id=1097914722";
   const query = querystring.parse(url);
   const sn = <string>query.sn;
+  const theme_id = <string>query.theme_id;
   if (sn) {
-    console.log(sn);
-    const luckyNumber = await eleme.getLuckyNumber(sn);
+    console.log(sn, theme_id);
+    const luckyNumber = await eleme.getLuckyNumber(sn, theme_id);
     if (luckyNumber) {
       console.log(`是拼手气链接，第${luckyNumber}个最大`);
       const res = await eleme.getHongbao(sn);

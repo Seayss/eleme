@@ -149,14 +149,16 @@ var Eleme = /** @class */ (function () {
     /**
      * 根据 sn 获取拼手气大包是第几个
      * @param {string} sn 红包链接标识
+     * @param {string} theme_id 红包页面主题标识
      * @returns {Promise<number>}
      */
-    Eleme.prototype.getLuckyNumber = function (sn) {
+    Eleme.prototype.getLuckyNumber = function (sn, theme_id) {
+        if (theme_id === void 0) { theme_id = "0"; }
         return __awaiter(this, void 0, void 0, function () {
             var lucky_number;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.request.send("get", "/restapi/marketing/themes/0/group_sns/" + sn)];
+                    case 0: return [4 /*yield*/, this.request.send("get", "/restapi/marketing/themes/" + theme_id + "/group_sns/" + sn)];
                     case 1:
                         lucky_number = (_a.sent()).data.lucky_number;
                         return [2 /*return*/, lucky_number];
