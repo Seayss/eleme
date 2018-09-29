@@ -168,24 +168,30 @@ var Eleme = /** @class */ (function () {
     };
     /**
      * 绑定 sendMobileCode 传入的手机号码，需要先调用 loginByMobile
-     * @returns {Promise<object>}
+     * @returns {Promise<boolean>}
      */
     Eleme.prototype.changeMobile = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var data;
+            var e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.request.send("post", "/restapi/marketing/hongbao/weixin/" + this.cookie.openid + "/change", {
-                            phone: this.mobile,
-                            sign: this.cookie.sign
-                        }, {
-                            headers: {
-                                cookie: "SID=" + this.cookie.sid
-                            }
-                        })];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.request.send("post", "/restapi/marketing/hongbao/weixin/" + this.cookie.openid + "/change", {
+                                phone: this.mobile,
+                                sign: this.cookie.sign
+                            }, {
+                                headers: {
+                                    cookie: "SID=" + this.cookie.sid
+                                }
+                            })];
                     case 1:
-                        data = (_a.sent()).data;
-                        return [2 /*return*/, data];
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 2:
+                        e_1 = _a.sent();
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

@@ -130,23 +130,27 @@ export class Eleme {
 
   /**
    * 绑定 sendMobileCode 传入的手机号码，需要先调用 loginByMobile
-   * @returns {Promise<object>}
+   * @returns {Promise<boolean>}
    */
-  async changeMobile(): Promise<object> {
-    const { data } = await this.request.send(
-      "post",
-      `/restapi/marketing/hongbao/weixin/${this.cookie.openid}/change`,
-      {
-        phone: this.mobile,
-        sign: this.cookie.sign
-      },
-      {
-        headers: {
-          cookie: `SID=${this.cookie.sid}`
+  async changeMobile(): Promise<boolean> {
+    try {
+      await this.request.send(
+        "post",
+        `/restapi/marketing/hongbao/weixin/${this.cookie.openid}/change`,
+        {
+          phone: this.mobile,
+          sign: this.cookie.sign
+        },
+        {
+          headers: {
+            cookie: `SID=${this.cookie.sid}`
+          }
         }
-      }
-    );
-    return data;
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   /**
