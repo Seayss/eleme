@@ -153,7 +153,7 @@ var Eleme = /** @class */ (function () {
      * @returns {Promise<number>}
      */
     Eleme.prototype.getLuckyNumber = function (sn, theme_id) {
-        if (theme_id === void 0) { theme_id = "2913"; }
+        if (theme_id === void 0) { theme_id = "0"; }
         return __awaiter(this, void 0, void 0, function () {
             var lucky_number;
             return __generator(this, function (_a) {
