@@ -1,4 +1,5 @@
 import * as querystring from "querystring";
+import * as hex2dec from "hex2dec";
 import axios, {
   AxiosInstance,
   AxiosProxyConfig,
@@ -56,6 +57,6 @@ export class Request {
    * @returns {string}
    */
   static createXShared(sn: string = "29e47b57971c1c9d"): string {
-    return `eosid=${parseInt(sn, 16)}`;
+    return `eosid=${hex2dec.hexToDec(sn)}`;
   }
 }

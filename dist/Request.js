@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const querystring = require("querystring");
+const hex2dec = require("hex2dec");
 const axios_1 = require("axios");
 class Request {
     constructor(proxy) {
@@ -39,7 +40,7 @@ class Request {
      * @returns {string}
      */
     static createXShared(sn = "29e47b57971c1c9d") {
-        return `eosid=${parseInt(sn, 16)}`;
+        return `eosid=${hex2dec.hexToDec(sn)}`;
     }
 }
 exports.Request = Request;
